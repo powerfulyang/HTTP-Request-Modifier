@@ -1,0 +1,335 @@
+{
+  "uri": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/DeclarativeNetRequest.Rule",
+  "definitions": {
+    "DeclarativeNetRequest.Rule": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "An id which uniquely identifies a rule. Mandatory and should be >= 1."
+        },
+        "priority": {
+          "type": "number",
+          "description": "Rule priority. Defaults to 1. When specified, should be >= 1 Optional."
+        },
+        "condition": {
+          "$ref": "#/definitions/DeclarativeNetRequest.RuleConditionType",
+          "description": "The condition under which this rule is triggered."
+        },
+        "action": {
+          "$ref": "#/definitions/DeclarativeNetRequest.RuleActionType",
+          "description": "The action to take if this rule is matched."
+        }
+      },
+      "required": ["id", "condition", "action"],
+      "additionalProperties": false
+    },
+    "DeclarativeNetRequest.RuleConditionType": {
+      "type": "object",
+      "properties": {
+        "urlFilter": {
+          "type": "string",
+          "description": "TODO: link to doc explaining supported pattern. The pattern which is matched against the network request url. Only one of 'urlFilter' or 'regexFilter' can be specified. Optional."
+        },
+        "regexFilter": {
+          "type": "string",
+          "description": "Regular expression to match against the network request url. Only one of 'urlFilter' or 'regexFilter' can be specified. Optional."
+        },
+        "isUrlFilterCaseSensitive": {
+          "type": "boolean",
+          "description": "Whether 'urlFilter' or 'regexFilter' is case-sensitive. Optional."
+        },
+        "initiatorDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The rule will only match network requests originating from the list of 'initiatorDomains'. If the list is omitted, the rule is applied to requests from all domains. Optional."
+        },
+        "excludedInitiatorDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The rule will not match network requests originating from the list of 'initiatorDomains'. If the list is empty or omitted, no domains are excluded. This takes precedence over 'initiatorDomains'. Optional."
+        },
+        "requestDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The rule will only match network requests when the domain matches one from the list of 'requestDomains'. If the list is omitted, the rule is applied to requests from all domains. Optional."
+        },
+        "excludedRequestDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The rule will not match network requests when the domains matches one from the list of 'excludedRequestDomains'. If the list is empty or omitted, no domains are excluded. This takes precedence over 'requestDomains'. Optional."
+        },
+        "resourceTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeclarativeNetRequest.ResourceType"
+          },
+          "description": "List of resource types which the rule can match. When the rule action is 'allowAllRequests', this must be specified and may only contain 'main_frame' or 'sub_frame'. Cannot be specified if 'excludedResourceTypes' is specified. If neither of them is specified, all resource types except 'main_frame' are matched. Optional."
+        },
+        "excludedResourceTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeclarativeNetRequest.ResourceType"
+          },
+          "description": "List of resource types which the rule won't match. Cannot be specified if 'resourceTypes' is specified. If neither of them is specified, all resource types except 'main_frame' are matched. Optional."
+        },
+        "requestMethods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of HTTP request methods which the rule can match. Should be a lower-case method such as 'connect', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put'.' Optional."
+        },
+        "excludedRequestMethods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of request methods which the rule won't match. Cannot be specified if 'requestMethods' is specified. If neither of them is specified, all request methods are matched. Optional."
+        },
+        "domainType": {
+          "$ref": "#/definitions/DeclarativeNetRequest.RuleConditionDomainTypeEnum",
+          "description": "Specifies whether the network request is first-party or third-party to the domain from which it originated. If omitted, all requests are matched. Optional."
+        },
+        "tabIds": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "List of tabIds which the rule should match. An ID of -1 matches requests which don't originate from a tab. Only supported for session-scoped rules. Optional."
+        },
+        "excludedTabIds": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "List of tabIds which the rule should not match. An ID of -1 excludes requests which don't originate from a tab. Only supported for session-scoped rules. Optional."
+        }
+      },
+      "additionalProperties": false,
+      "description": "The condition under which this rule is triggered."
+    },
+    "DeclarativeNetRequest.ResourceType": {
+      "type": "string",
+      "enum": [
+        "main_frame",
+        "sub_frame",
+        "stylesheet",
+        "script",
+        "image",
+        "object",
+        "object_subrequest",
+        "xmlhttprequest",
+        "xslt",
+        "ping",
+        "beacon",
+        "xml_dtd",
+        "font",
+        "media",
+        "websocket",
+        "csp_report",
+        "imageset",
+        "web_manifest",
+        "speculative",
+        "other"
+      ],
+      "description": "How the requested resource will be used. Comparable to the webRequest.ResourceType type."
+    },
+    "DeclarativeNetRequest.RuleConditionDomainTypeEnum": {
+      "type": "string",
+      "enum": ["firstParty", "thirdParty"],
+      "description": "Specifies whether the network request is first-party or third-party to the domain from which it originated. If omitted, all requests are matched."
+    },
+    "DeclarativeNetRequest.RuleActionType": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/DeclarativeNetRequest.RuleActionTypeEnum"
+        },
+        "redirect": {
+          "$ref": "#/definitions/DeclarativeNetRequest.RuleActionRedirectType",
+          "description": "Describes how the redirect should be performed. Only valid when type is 'redirect'. Optional."
+        },
+        "requestHeaders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeclarativeNetRequest.RuleActionRequestHeadersItemType"
+          },
+          "description": "The request headers to modify for the request. Only valid when type is 'modifyHeaders'. Optional."
+        },
+        "responseHeaders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeclarativeNetRequest.RuleActionResponseHeadersItemType"
+          },
+          "description": "The response headers to modify for the request. Only valid when type is 'modifyHeaders'. Optional."
+        }
+      },
+      "required": ["type"],
+      "additionalProperties": false,
+      "description": "The action to take if this rule is matched."
+    },
+    "DeclarativeNetRequest.RuleActionTypeEnum": {
+      "type": "string",
+      "enum": ["block", "redirect", "allow", "upgradeScheme", "modifyHeaders", "allowAllRequests"]
+    },
+    "DeclarativeNetRequest.RuleActionRedirectType": {
+      "type": "object",
+      "properties": {
+        "extensionPath": {
+          "type": "string",
+          "description": "Path relative to the extension directory. Should start with '/'. Optional."
+        },
+        "transform": {
+          "$ref": "#/definitions/DeclarativeNetRequest.URLTransform",
+          "description": "Url transformations to perform. Optional."
+        },
+        "url": {
+          "type": "string",
+          "description": "The redirect url. Redirects to JavaScript urls are not allowed. Optional."
+        },
+        "regexSubstitution": {
+          "type": "string",
+          "description": "Substitution pattern for rules which specify a 'regexFilter'. The first match of regexFilter within the url will be replaced with this pattern. Within regexSubstitution, backslash-escaped digits (\\1 to \\9) can be used to insert the corresponding capture groups. \\0 refers to the entire matching text. Optional."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Describes how the redirect should be performed. Only valid when type is 'redirect'."
+    },
+    "DeclarativeNetRequest.URLTransform": {
+      "type": "object",
+      "properties": {
+        "scheme": {
+          "$ref": "#/definitions/DeclarativeNetRequest.URLTransformSchemeEnum",
+          "description": "The new scheme for the request. Optional."
+        },
+        "username": {
+          "type": "string",
+          "description": "The new username for the request. Optional."
+        },
+        "password": {
+          "type": "string",
+          "description": "The new password for the request. Optional."
+        },
+        "host": {
+          "type": "string",
+          "description": "The new host name for the request. Optional."
+        },
+        "port": {
+          "type": "string",
+          "description": "The new port for the request. If empty, the existing port is cleared. Optional."
+        },
+        "path": {
+          "type": "string",
+          "description": "The new path for the request. If empty, the existing path is cleared. Optional."
+        },
+        "query": {
+          "type": "string",
+          "description": "The new query for the request. Should be either empty, in which case the existing query is cleared; or should begin with '?'. Cannot be specified if 'queryTransform' is specified. Optional."
+        },
+        "queryTransform": {
+          "$ref": "#/definitions/DeclarativeNetRequest.URLTransformQueryTransformType",
+          "description": "Add, remove or replace query key-value pairs. Cannot be specified if 'query' is specified. Optional."
+        },
+        "fragment": {
+          "type": "string",
+          "description": "The new fragment for the request. Should be either empty, in which case the existing fragment is cleared; or should begin with '#'. Optional."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Describes the type of the Rule.action.redirect.transform property."
+    },
+    "DeclarativeNetRequest.URLTransformSchemeEnum": {
+      "type": "string",
+      "enum": ["http", "https", "moz-extension"],
+      "description": "The new scheme for the request."
+    },
+    "DeclarativeNetRequest.URLTransformQueryTransformType": {
+      "type": "object",
+      "properties": {
+        "removeParams": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of query keys to be removed. Optional."
+        },
+        "addOrReplaceParams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeclarativeNetRequest.URLTransformQueryTransformAddOrReplaceParamsItemType"
+          },
+          "description": "The list of query key-value pairs to be added or replaced. Optional."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Add, remove or replace query key-value pairs. Cannot be specified if 'query' is specified."
+    },
+    "DeclarativeNetRequest.URLTransformQueryTransformAddOrReplaceParamsItemType": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "replaceOnly": {
+          "type": "boolean",
+          "description": "If true, the query key is replaced only if it's already present. Otherwise, the key is also added if it's missing. Optional."
+        }
+      },
+      "required": ["key", "value"],
+      "additionalProperties": false
+    },
+    "DeclarativeNetRequest.RuleActionRequestHeadersItemType": {
+      "type": "object",
+      "properties": {
+        "header": {
+          "type": "string",
+          "description": "The name of the request header to be modified."
+        },
+        "operation": {
+          "type": "string",
+          "enum": ["append", "set", "remove"],
+          "description": "The operation to be performed on a header."
+        },
+        "value": {
+          "type": "string",
+          "description": "The new value for the header. Must be specified for the 'append' and 'set' operations. Optional."
+        }
+      },
+      "required": ["header", "operation"],
+      "additionalProperties": false
+    },
+    "DeclarativeNetRequest.RuleActionResponseHeadersItemType": {
+      "type": "object",
+      "properties": {
+        "header": {
+          "type": "string",
+          "description": "The name of the response header to be modified."
+        },
+        "operation": {
+          "type": "string",
+          "enum": ["append", "set", "remove"],
+          "description": "The operation to be performed on a header."
+        },
+        "value": {
+          "type": "string",
+          "description": "The new value for the header. Must be specified for the 'append' and 'set' operations. Optional."
+        }
+      },
+      "required": ["header", "operation"],
+      "additionalProperties": false
+    }
+  }
+}

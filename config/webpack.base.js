@@ -2,6 +2,7 @@ const path = require('node:path');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 const CopyPlugin = require('copy-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 dotenv.config();
 
@@ -77,6 +78,11 @@ module.exports = {
         },
       ],
     }),
+    new MonacoWebpackPlugin({
+      // Add languages as needed...
+      languages: ['json'],
+      filename: '[name].worker.js',
+    }),
   ],
   optimization: {
     splitChunks: {
@@ -88,6 +94,10 @@ module.exports = {
         },
       },
     },
+  },
+  cache: {
+    cacheLocation: path.join(__dirname, '../.cache'),
+    type: 'filesystem',
   },
   target: 'browserslist',
 };

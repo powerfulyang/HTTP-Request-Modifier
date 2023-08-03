@@ -8,6 +8,8 @@
     "strict": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "useUnknownInCatchVariables": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

@@ -1,11 +1,11 @@
 {
   "extensionName": {
-    "message": "name"
+    "message": "HTTP-Request-Modifier"
   },
   "extensionDescription": {
-    "message": "description"
+    "message": "A simple HTTP request modifier"
   },
   "extensionActionTitle": {
-    "message": "Tools"
+    "message": "HTTP-Request-Modifier"
   }
 }
