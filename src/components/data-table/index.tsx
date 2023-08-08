@@ -13,10 +13,10 @@ import {
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { cn } from '@/lib/utils';
 
 import {
   Table,
@@ -30,9 +30,14 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  className?: string;
 }
 
-export const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) => {
+export const DataTable = <TData, TValue>({
+  columns,
+  data,
+  className,
+}: DataTableProps<TData, TValue>) => {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -54,14 +59,13 @@ export const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
   return (
-    <div className="space-y-4">
+    <div className={cn('space-y-4', className)}>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

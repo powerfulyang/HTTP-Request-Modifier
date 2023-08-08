@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import type browser from 'webextension-polyfill';
+import { DeleteIcon } from 'lucide-react';
+import browser from 'webextension-polyfill';
 
 export const columns: ColumnDef<browser.DeclarativeNetRequest.Rule>[] = [
   {
@@ -22,6 +23,21 @@ export const columns: ColumnDef<browser.DeclarativeNetRequest.Rule>[] = [
     header: 'Condition',
     cell: ({ row }) => {
       return <pre>{JSON.stringify(row.original.condition, null, 2)}</pre>;
+    },
+  },
+  {
+    accessorKey: 'option',
+    header: 'option',
+    cell: ({ row }) => {
+      return (
+        <DeleteIcon
+          onClick={() => {
+            return browser.declarativeNetRequest.updateDynamicRules({
+              removeRuleIds: [row.original.id],
+            });
+          }}
+        />
+      );
     },
   },
 ];

@@ -16,8 +16,10 @@
     "last 1 Chrome versions"
   ],
   "devDependencies": {
+    "@jest/globals": "29.6.2",
     "@powerfulyang/lint": "3.6.0",
     "@swc/plugin-transform-imports": "1.5.70",
+    "@types/qs": "6.9.7",
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
     "@types/webextension-polyfill": "0.10.1",
@@ -25,6 +27,7 @@
     "copy-webpack-plugin": "11.0.0",
     "dotenv": "16.3.1",
     "html-loader": "4.2.0",
+    "qs": "6.11.2",
     "swc-loader": "0.2.3",
     "typescript": "5.1.6",
     "webpack": "5.88.2",
